@@ -1,26 +1,94 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+ * Design tokens.
+ *
+ * Everything inside @theme is both a CSS custom property (var(--color-primary)) and a Tailwind
+ * utility (bg-primary, text-text-secondary, rounded-card, shadow-card, ease-standard...).
+ * Tokens Tailwind has no theme namespace for (transforms, durations, layers) live in :root.
+ *
+ * The SVGs under public/icons/ are drawn in currentColor and carry no colour of their own: the
+ * file-type colour is applied where an icon is rendered (e.g. text-file-pdf on an inline SVG, or
+ * bg-file-pdf on an element masked with the SVG).
+ */
+@theme {
+  /* Brand */
+  --color-primary: hsla(209.6, 93.3%, 35.3%, 1);
+  --color-primary-hover: hsla(209.8, 93.2%, 28.8%, 1);
+  --color-primary-soft: hsla(211.8, 51.5%, 93.5%, 1);
+  --color-secondary: hsla(327.6, 100%, 44.3%, 1);
+  --color-secondary-hover: hsla(327.7, 100%, 36.1%, 1);
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Surfaces */
+  --color-background: hsla(0, 0%, 97.6%, 1);
+  --color-card: hsla(0, 0%, 100%, 1);
+  --color-tag: hsla(0, 0%, 94.1%, 1);
+  --color-border: hsla(0, 0%, 89.8%, 1);
+
+  /* Text */
+  --color-text-primary: hsla(0, 0%, 0%, 1);
+  --color-text-secondary: hsla(0, 0%, 62.7%, 1);
+  --color-text-on-tag: hsla(0, 0%, 33.3%, 1);
+  --color-text-on-primary: hsla(0, 0%, 100%, 1);
+
+  /* File types */
+  --color-file-folder: hsla(209.6, 93.3%, 35.3%, 1);
+  --color-file-doc: hsla(216, 77.5%, 41.8%, 1);
+  --color-file-csv: hsla(147.2, 77.1%, 27.5%, 1);
+  --color-file-pdf: hsla(3.6, 100%, 49%, 1);
+  --color-file-mov: hsla(268.1, 50.4%, 49.8%, 1);
+  --color-file-generic: hsla(0, 0%, 33.3%, 1);
+
+  /* Radius */
+  --radius-tag: 9999px;
+  --radius-control: 6px;
+  --radius-card: 10px;
+  --radius-panel: 14px;
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px hsla(0, 0%, 0%, 0.06), 0 1px 3px hsla(0, 0%, 0%, 0.04);
+  --shadow-card-hover: 0 4px 12px hsla(0, 0%, 0%, 0.08), 0 2px 4px hsla(0, 0%, 0%, 0.04);
+  --shadow-panel: 0 8px 24px hsla(0, 0%, 0%, 0.08);
+  --shadow-focus: 0 0 0 3px hsla(209.6, 93.3%, 35.3%, 0.35);
+
+  /* Motion */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1.2);
+
+  /* Type */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  /* Transforms */
+  --transform-lift: translateY(-2px);
+  --transform-press: scale(0.98);
+  --transform-chevron-open: rotate(90deg);
+
+  /* Durations */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+
+  /* Layers */
+  --z-panel: 10;
+  --z-overlay: 20;
+  --z-tooltip: 30;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transform-lift: none;
+    --transform-press: none;
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
 }

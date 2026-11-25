@@ -1,6 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import files from "../data/files.json";
+import { ROOT_BREADCRUMB_NAME } from "../utils/directory";
 import useFiles from "./useFiles";
 
 const rawJson = JSON.stringify(files);
@@ -105,7 +106,7 @@ describe("useFiles", () => {
     it("builds breadcrumbs for the current path", () => {
       const { result } = setup(nestedJson);
 
-      expect(result.current.breadcrumbs).toEqual([{ name: "Home", index: -1 }]);
+      expect(result.current.breadcrumbs).toEqual([{ name: ROOT_BREADCRUMB_NAME, index: -1 }]);
       expect(result.current.isAtRoot).toBe(true);
 
       act(() => result.current.openFolder("Level 1"));
@@ -113,7 +114,7 @@ describe("useFiles", () => {
 
       expect(result.current.isAtRoot).toBe(false);
       expect(result.current.breadcrumbs).toEqual([
-        { name: "Home", index: -1 },
+        { name: ROOT_BREADCRUMB_NAME, index: -1 },
         { name: "Level 1", index: 0 },
         { name: "Level 2", index: 1 },
       ]);
