@@ -1,0 +1,78 @@
+.card {
+  display: flex;
+  width: 100%;
+  border-radius: var(--radius-card);
+  color: var(--color-text-primary);
+  text-align: left;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
+}
+
+.card:focus-visible {
+  outline-color: var(--color-primary);
+}
+
+.card:active {
+  transform: var(--transform-press);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.name {
+  overflow: hidden;
+  font-size: var(--font-size-base);
+  line-height: 1.375rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.count {
+  font-size: var(--font-size-xs);
+  line-height: 1rem;
+  color: var(--color-text-secondary);
+}
+
+.grid {
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+  padding: 0.5rem 0.75rem 0.75rem;
+}
+
+.grid:hover {
+  background-color: var(--color-primary-soft);
+}
+
+.grid .icon {
+  --size: 9rem;
+  width: var(--size);
+  height: var(--size);
+  margin: calc(var(--size) * -4 / 24) 0 calc(var(--size) * -2.5 / 24) calc(var(--size) * -3.5 / 24);
+}
+
+.list {
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--color-card);
+  box-shadow: var(--shadow-card);
+}
+
+.list:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: var(--transform-lift);
+}
+
+.list .icon {
+  width: 3rem;
+  height: 3rem;
+}

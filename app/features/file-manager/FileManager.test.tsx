@@ -4,19 +4,18 @@ import { describe, expect, it } from "vitest";
 import files from "@/app/shared/data/files.json";
 import FileManager from "./FileManager";
 
-/*
- * Checks the header is wired to the file state. The list asserted on here is the temporary
- * placeholder; update these queries when the real file list replaces it.
- */
+/** Checks the header is wired to the file state shown in the browser below it. */
 function setup() {
   const user = userEvent.setup();
   render(<FileManager rawJson={JSON.stringify(files)} />);
 
   const desktop = within(screen.getByTestId("header-desktop"));
+  // Each card's accessible name starts with the item's name.
   const names = () =>
-    within(screen.getByRole("list", { name: "Documents" }))
-      .getAllByRole("listitem")
-      .map((li) => li.firstChild?.textContent);
+    screen
+      .getAllByRole("list", { name: /^(Folders|Files|Folders and files)$/ })
+      .flatMap((list) => within(list).getAllByRole("button"))
+      .map((card) => card.getAttribute("aria-label")?.split(",")[0]);
 
   return { user, desktop, names };
 }
@@ -67,13 +66,22 @@ describe("FileManager header wiring", () => {
     ]);
   });
 
-  it("switches the list between list and grid view", async () => {
+  it("switches the browser between list and grid view", async () => {
     const { user, desktop } = setup();
-    const list = screen.getByRole("list", { name: "Documents" });
-    expect(list).toHaveAttribute("data-view", "list");
+    expect(screen.getByRole("list", { name: "Files" })).toBeInTheDocument();
 
     await user.click(desktop.getByRole("button", { name: "Switch to grid view" }));
 
-    expect(list).toHaveAttribute("data-view", "grid");
+    expect(screen.getByRole("list", { name: "Folders and files" })).toBeInTheDocument();
+    expect(screen.queryByRole("list", { name: "Files" })).not.toBeInTheDocument();
+  });
+
+  it("selects a file when its card is activated", async () => {
+    const { user } = setup();
+    const card = screen.getByRole("button", { name: /^Cost centres,/ });
+
+    await user.click(card);
+
+    expect(card).toHaveAttribute("aria-current", "true");
   });
 });

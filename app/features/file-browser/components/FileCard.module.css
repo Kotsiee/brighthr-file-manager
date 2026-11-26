@@ -1,0 +1,139 @@
+.card {
+  display: flex;
+  width: 100%;
+  border-radius: var(--radius-card);
+  color: var(--color-text-primary);
+  text-align: left;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-base) var(--ease-standard),
+    transform var(--duration-base) var(--ease-standard);
+}
+
+.card:focus-visible {
+  outline-color: var(--color-primary);
+}
+
+.card:active {
+  transform: var(--transform-press);
+}
+
+.name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tag {
+  flex-shrink: 0;
+  padding: 0 0.375rem;
+  border-radius: var(--radius-tag);
+  background-color: var(--color-tag);
+  color: var(--color-text-on-tag);
+  font-size: var(--font-size-xs);
+  line-height: 1.125rem;
+}
+
+.date {
+  flex-shrink: 0;
+  font-size: var(--font-size-xs);
+  line-height: 1rem;
+  color: var(--color-text-secondary);
+}
+
+.grid {
+  flex-direction: column;
+  height: 100%;
+  background-color: var(--color-card);
+  box-shadow: var(--shadow-card);
+}
+
+.grid:hover {
+  box-shadow: var(--shadow-card-hover);
+  transform: var(--transform-lift);
+}
+
+.grid[aria-current="true"] {
+  box-shadow:
+    0 0 0 2px var(--color-primary),
+    var(--shadow-card);
+}
+
+.preview {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem 1rem;
+}
+
+.previewIcon {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0 0.75rem 0.75rem;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+}
+
+.titleRow .name {
+  flex: 1;
+}
+
+.smallIcon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.list {
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem;
+}
+
+.list:hover {
+  background-color: var(--color-card);
+}
+
+.list[aria-current="true"] {
+  background-color: var(--color-primary-soft);
+}
+
+.listIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.body .name {
+  max-width: 100%;
+  font-size: var(--font-size-base);
+  line-height: 1.375rem;
+}
+
+.list .date {
+  align-self: flex-start;
+  margin-top: 0.1875rem;
+}

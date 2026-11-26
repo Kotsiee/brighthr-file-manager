@@ -1,0 +1,31 @@
+.icon {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-color: var(--color-file-generic);
+}
+
+.icon[data-type="folder"] {
+  background-color: var(--color-file-folder);
+}
+
+.icon[data-type="pdf"] {
+  background-color: var(--color-file-pdf);
+}
+
+.icon[data-type="doc"] {
+  background-color: var(--color-file-doc);
+}
+
+.icon[data-type="csv"] {
+  background-color: var(--color-file-csv);
+}
+
+.icon[data-type="mov"] {
+  background-color: var(--color-file-mov);
+}
+
+.icon.muted {
+  background-color: var(--color-icon-muted);
+}

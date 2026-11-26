@@ -39,6 +39,7 @@
   --color-file-pdf: hsla(3.6, 100%, 49%, 1);
   --color-file-mov: hsla(268.1, 50.4%, 49.8%, 1);
   --color-file-generic: hsla(0, 0%, 33.3%, 1);
+  --color-icon-muted: hsla(0, 0%, 80%, 1);
 
   /* Radius */
   --radius-tag: 9999px;

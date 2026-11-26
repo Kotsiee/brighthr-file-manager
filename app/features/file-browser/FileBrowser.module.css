@@ -1,0 +1,47 @@
+.browser {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Phones: always two columns. */
+.grid {
+  --card-min-width: 19rem;
+  --card-max-width: 28rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0;
+  list-style: none;
+}
+
+.empty {
+  padding: 3rem 0;
+  font-size: var(--font-size-sm);
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+/*
+ * Wider screens: as many columns as fit cards of at least --card-min-width, sharing the leftover
+ * space up to --card-max-width. That's five on a 1920px monitor, four at 1366px to 1600px, three at
+ * 1024px to 1280px, and two at 768px (matching the phone layout). Arrow-key navigation reads the count back.
+ */
+@media (min-width: 48rem) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--card-min-width)), 1fr));
+    gap: 1.5rem 1.25rem;
+  }
+
+  .grid > li {
+    max-width: var(--card-max-width);
+  }
+}
