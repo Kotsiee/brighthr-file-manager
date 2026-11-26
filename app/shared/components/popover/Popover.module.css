@@ -1,0 +1,38 @@
+/* Floating surface: white, borderless, 8px radius, soft elevation, anchored under its trigger. */
+.panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: var(--z-panel);
+  min-width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.25rem;
+  border: none;
+  border-radius: var(--radius-popover);
+  background-color: var(--color-card);
+  box-shadow: var(--shadow-panel);
+}
+
+/* Default sizing when the caller doesn't set a width. */
+.fitContent {
+  width: max-content;
+}
+
+.choice {
+  justify-content: space-between;
+}
+
+.choice[aria-selected="true"],
+.choice[aria-checked="true"] {
+  font-weight: 500;
+}
+
+.check {
+  color: var(--color-secondary);
+  visibility: hidden;
+}
+
+.choice[aria-selected="true"] .check,
+.choice[aria-checked="true"] .check {
+  visibility: visible;
+}

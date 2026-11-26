@@ -1,0 +1,52 @@
+.field:focus-within {
+  border-color: var(--color-primary);
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 0.5rem 0 1rem;
+  border: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  font-size: var(--font-size-base);
+  outline: 2px solid transparent;
+}
+
+.input::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 1;
+}
+
+.input::-webkit-search-cancel-button,
+.input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.submit {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin-right: 0.25rem;
+  border-radius: var(--radius-input);
+  color: var(--color-text-on-tag);
+  outline: 2px solid transparent;
+  transition: color var(--duration-fast) var(--ease-standard);
+}
+
+.submit:hover,
+.submit:focus-visible {
+  color: var(--color-primary);
+}
+
+@media (min-width: 48rem) {
+  .input {
+    font-size: var(--font-size-sm);
+  }
+}

@@ -47,6 +47,24 @@ describe("useFiles", () => {
         "Public Holiday policy",
       ]);
     });
+
+    it("accepts initial filter and sort settings", () => {
+      const { result } = renderHook(() =>
+        useFiles(rawJson, {
+          initialFileType: "pdf",
+          initialSortType: "added",
+          initialSortOrder: "desc",
+        }),
+      );
+
+      expect(result.current.fileType).toBe("pdf");
+      expect(result.current.sortType).toBe("added");
+      expect(result.current.sortOrder).toBe("desc");
+      expect(names(result.current.files)).toEqual([
+        "Employee Handbook",
+        "Public Holiday policy",
+      ]);
+    });
   });
 
   describe("navigation", () => {

@@ -1,0 +1,7 @@
+.logo {
+  display: block;
+  flex-shrink: 0;
+  width: 2.25rem;
+  aspect-ratio: 1;
+  background-color: var(--color-primary);
+}

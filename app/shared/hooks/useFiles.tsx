@@ -11,14 +11,27 @@ import processFiles from "../utils/process-files";
 import searchFiles from "../utils/search-files";
 import sortFiles, { SortOrder, SortType } from "../utils/sort-files";
 
-export default function useFiles(rawJson: string) {
+export interface UseFilesOptions {
+  initialFileType?: string;
+  initialSortType?: SortType;
+  initialSortOrder?: SortOrder;
+}
+
+export default function useFiles(
+  rawJson: string,
+  {
+    initialFileType = "all",
+    initialSortType = "name",
+    initialSortOrder = "asc",
+  }: UseFilesOptions = {},
+) {
   const rootFiles = useMemo(() => processFiles(rawJson), [rawJson]);
 
   const [currentPath, setCurrentPath] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [fileType, setFileType] = useState<string>("all");
-  const [sortType, setSortType] = useState<SortType>("name");
-  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
+  const [fileType, setFileType] = useState<string>(initialFileType);
+  const [sortType, setSortType] = useState<SortType>(initialSortType);
+  const [sortOrder, setSortOrder] = useState<SortOrder>(initialSortOrder);
 
   const currentDirectory = useMemo(
     () => getDirectory(rootFiles, currentPath),

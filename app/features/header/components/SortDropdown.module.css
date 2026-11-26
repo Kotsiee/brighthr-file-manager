@@ -1,0 +1,24 @@
+.direction {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  margin-left: 0.25rem;
+  border-radius: 3px;
+  color: var(--color-secondary);
+  outline: 2px solid transparent;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+.direction:hover {
+  background-color: var(--color-tag);
+  color: var(--color-secondary-hover);
+}
+
+.direction:focus-visible {
+  outline-color: var(--color-primary);
+}

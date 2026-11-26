@@ -1,0 +1,55 @@
+.ghostIconButton {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-height);
+  height: var(--control-height);
+  border-radius: var(--radius-input);
+  color: var(--color-text-on-tag);
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+.ghostIconButton:hover,
+.ghostIconButton[aria-expanded="true"] {
+  background-color: var(--color-tag);
+  color: var(--color-text-primary);
+}
+
+.ghostIconButton:focus-visible {
+  outline-color: var(--color-primary);
+}
+
+.borderedControl {
+  display: flex;
+  align-items: center;
+  height: var(--control-height);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-input);
+  background: transparent;
+  transition: border-color var(--duration-fast) var(--ease-standard);
+}
+
+.popoverItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: var(--control-height);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-input);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+  text-align: left;
+  color: var(--color-text-primary);
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+}
+
+.popoverItem:focus {
+  background-color: var(--color-primary-soft);
+}

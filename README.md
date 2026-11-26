@@ -80,6 +80,20 @@ The aim is simplicity, staying close to the brief. As a single page app with no 
 - **Side panel:** a file tree of the folder structure.
 - **Main body:** the files and folders in the current folder, shown as a grid of cards or as a list.
 
+### Figma designs
+
+The layout was designed in Figma before it was built.
+
+#### Desktop
+
+![Desktop design](images/Desktop%20Design.png)
+
+#### Mobile
+
+| Grid view | List view |
+| --------- | --------- |
+| ![Mobile design, grid view](images/Mobile%20Design%20Grid.png) | ![Mobile design, list view](images/Mobile%20Design%20List.png) |
+
 ## Assumptions
 
 - The data is read-only: files and folders cannot be renamed, added or deleted.

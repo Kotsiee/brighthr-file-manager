@@ -1,0 +1,42 @@
+.root {
+  position: relative;
+}
+
+.control:has(.trigger:focus-visible),
+.control:has(.trigger[aria-expanded="true"]) {
+  border-color: var(--color-primary);
+}
+
+.trigger {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-width: 0;
+  height: 100%;
+  padding: 0 0.75rem 0 1rem;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-primary);
+  outline: 2px solid transparent;
+}
+
+.hasLeading .trigger {
+  padding-left: 0.375rem;
+}
+
+.label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  color: var(--color-text-on-tag);
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.trigger[aria-expanded="true"] .chevron {
+  transform: rotate(180deg);
+}

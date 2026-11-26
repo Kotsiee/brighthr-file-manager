@@ -1,0 +1,29 @@
+.root {
+  position: relative;
+}
+
+.panel {
+  width: 16rem;
+}
+
+.value {
+  margin-left: auto;
+  color: var(--color-text-secondary);
+}
+
+.icon {
+  color: var(--color-text-on-tag);
+}
+
+.groupHeading {
+  padding: 0.5rem 0.75rem 0.25rem;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.separator {
+  height: 1px;
+  margin: 0.25rem;
+  background-color: var(--color-border);
+}
