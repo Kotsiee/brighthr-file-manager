@@ -3,6 +3,12 @@ import { FMFile } from "../contracts/FMFile";
 export type SortType = "name" | "added";
 export type SortOrder = "asc" | "desc";
 
+export const isSortType = (value: unknown): value is SortType =>
+  value === "name" || value === "added";
+
+export const isSortOrder = (value: unknown): value is SortOrder =>
+  value === "asc" || value === "desc";
+
 export default function sortFiles(
   files: FMFile[],
   sortType: SortType,

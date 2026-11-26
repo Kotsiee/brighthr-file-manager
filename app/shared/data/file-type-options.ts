@@ -8,3 +8,6 @@ export const FILE_TYPE_OPTIONS: Option[] = [
   { value: "csv", label: "CSV" },
   { value: "mov", label: "MOV" },
 ];
+
+export const isFileTypeOption = (value: unknown): value is string =>
+  FILE_TYPE_OPTIONS.some((option) => option.value === value);

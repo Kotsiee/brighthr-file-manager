@@ -1,4 +1,6 @@
 import { useMemo, useState } from "react";
+import { STORAGE_KEYS } from "../constants/storage-keys";
+import { isFileTypeOption } from "../data/file-type-options";
 import {
   enterFolder,
   getBreadcrumbs,
@@ -9,13 +11,22 @@ import {
 import { filterFilesByType } from "../utils/filter-files";
 import processFiles from "../utils/process-files";
 import searchFiles from "../utils/search-files";
-import sortFiles, { SortOrder, SortType } from "../utils/sort-files";
+import sortFiles, {
+  isSortOrder,
+  isSortType,
+  SortOrder,
+  SortType,
+} from "../utils/sort-files";
+import usePersistentState from "./usePersistentState";
 
 export interface UseFilesOptions {
   initialFileType?: string;
   initialSortType?: SortType;
   initialSortOrder?: SortOrder;
+  persist?: boolean;
 }
+
+const isString = (value: unknown): value is string => typeof value === "string";
 
 export default function useFiles(
   rawJson: string,
@@ -23,15 +34,35 @@ export default function useFiles(
     initialFileType = "all",
     initialSortType = "name",
     initialSortOrder = "asc",
+    persist = false,
   }: UseFilesOptions = {},
 ) {
   const rootFiles = useMemo(() => processFiles(rawJson), [rawJson]);
 
   const [currentPath, setCurrentPath] = useState<string[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [fileType, setFileType] = useState<string>(initialFileType);
-  const [sortType, setSortType] = useState<SortType>(initialSortType);
-  const [sortOrder, setSortOrder] = useState<SortOrder>(initialSortOrder);
+  const storageKey = (name: keyof typeof STORAGE_KEYS) =>
+    persist ? STORAGE_KEYS[name] : null;
+
+  const [searchQuery, setSearchQuery] = usePersistentState(
+    storageKey("searchQuery"),
+    "",
+    isString,
+  );
+  const [fileType, setFileType] = usePersistentState(
+    storageKey("fileType"),
+    initialFileType,
+    isFileTypeOption,
+  );
+  const [sortType, setSortType] = usePersistentState<SortType>(
+    storageKey("sortType"),
+    initialSortType,
+    isSortType,
+  );
+  const [sortOrder, setSortOrder] = usePersistentState<SortOrder>(
+    storageKey("sortOrder"),
+    initialSortOrder,
+    isSortOrder,
+  );
 
   const currentDirectory = useMemo(
     () => getDirectory(rootFiles, currentPath),
