@@ -10,6 +10,7 @@ function mapNodes(nodes: any[]): FMFile[] {
     if (Array.isArray(file.files)) {
       return {
         ...file,
+        added: file.added ? new Date(file.added) : undefined,
         files: mapNodes(file.files),
       };
     }

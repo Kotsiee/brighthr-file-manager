@@ -8,6 +8,23 @@ import FileBrowser from "./FileBrowser";
 
 const rawJson = JSON.stringify(files);
 
+const nestedJson = JSON.stringify([
+  {
+    type: "folder",
+    name: "Level 1",
+    files: [
+      {
+        type: "folder",
+        name: "Level 2",
+        files: [
+          { type: "doc", name: "Deep file", added: "2020-01-01" },
+          { type: "pdf", name: "Other deep file", added: "2020-02-01" },
+        ],
+      },
+    ],
+  },
+]);
+
 /*
  * Sorted by name, the root is: Expenses, Misc (folders), then Cost centres, Employee Handbook,
  * Public Holiday policy. In two columns, the grid is:
@@ -16,11 +33,11 @@ const rawJson = JSON.stringify(files);
  *   Cost centres       Employee Handbook
  *   Public Holiday policy
  */
-function setup(viewMode: ViewMode) {
+function setup(viewMode: ViewMode, json = rawJson) {
   const onOpenFile = vi.fn();
 
   function Harness() {
-    const { files, breadcrumbs, openFolder, navigateToBreadcrumb } = useFiles(rawJson);
+    const { files, breadcrumbs, openFolder, navigateToBreadcrumb } = useFiles(json);
     return (
       <FileBrowser
         files={files}
@@ -206,6 +223,74 @@ describe("FileBrowser", () => {
       expect(card("Employee Handbook")).toHaveFocus();
 
       await user.keyboard("{ArrowUp}{ArrowUp}");
+      expect(card("Expenses")).toHaveFocus();
+    });
+  });
+
+  describe("returning to parent folders", () => {
+    it("moves up from the top row to the parent folder, and Enter goes back to it", async () => {
+      mockGridColumns(2);
+      const { user, card, breadcrumb } = setup("grid");
+      await user.click(card("Expenses"));
+
+      card("Fuel allowances").focus();
+      await user.keyboard("{ArrowUp}");
+      const documents = breadcrumb().getByRole("button", { name: "Documents" });
+      expect(documents).toHaveFocus();
+
+      await user.keyboard("{Enter}");
+      expect(breadcrumb().getByText("Documents")).toHaveAttribute("aria-current", "page");
+      expect(card("Expenses")).toHaveFocus();
+    });
+
+    it("does the same from the top of the file list in list view", async () => {
+      const { user, card, breadcrumb } = setup("list");
+      await user.click(card("Misc"));
+
+      card("Christmas party").focus();
+      await user.keyboard("{ArrowUp}");
+
+      expect(breadcrumb().getByRole("button", { name: "Documents" })).toHaveFocus();
+    });
+
+    it("goes back down to the card it came from", async () => {
+      mockGridColumns(2);
+      const { user, card } = setup("grid");
+      await user.click(card("Expenses"));
+
+      card("Fuel allowances").focus();
+      await user.keyboard("{ArrowUp}{ArrowDown}");
+
+      expect(card("Fuel allowances")).toHaveFocus();
+    });
+
+    it("moves between ancestor folders with left and right", async () => {
+      const { user, card, breadcrumb } = setup("grid", nestedJson);
+      await user.click(card("Level 1"));
+      await user.click(card("Level 2"));
+
+      card("Deep file").focus();
+      await user.keyboard("{ArrowUp}");
+      expect(breadcrumb().getByRole("button", { name: "Level 1" })).toHaveFocus();
+
+      await user.keyboard("{ArrowLeft}");
+      expect(breadcrumb().getByRole("button", { name: "Documents" })).toHaveFocus();
+
+      // The current folder isn't a destination, so right stops at the parent.
+      await user.keyboard("{ArrowRight}{ArrowRight}");
+      expect(breadcrumb().getByRole("button", { name: "Level 1" })).toHaveFocus();
+
+      await user.keyboard("{ArrowLeft}{Enter}");
+      expect(breadcrumb().getByText("Documents")).toHaveAttribute("aria-current", "page");
+      expect(card("Level 1")).toHaveFocus();
+    });
+
+    it("stays on the card at the root, where there's no parent", async () => {
+      const { user, card } = setup("grid");
+
+      card("Expenses").focus();
+      await user.keyboard("{ArrowUp}");
+
       expect(card("Expenses")).toHaveFocus();
     });
   });

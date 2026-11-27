@@ -102,7 +102,7 @@ describe("FileManager page title", () => {
 });
 
 describe("FileManager remembered state", () => {
-  const storeAll = (values: Record<keyof typeof STORAGE_KEYS, string>) =>
+  const storeAll = (values: Partial<Record<keyof typeof STORAGE_KEYS, string>>) =>
     Object.entries(values).forEach(([name, value]) =>
       window.localStorage.setItem(STORAGE_KEYS[name as keyof typeof STORAGE_KEYS], value),
     );
@@ -145,8 +145,31 @@ describe("FileManager remembered state", () => {
     expect(names()).toEqual(before);
   });
 
+  it("reopens the folder the user was last in", async () => {
+    const first = setup();
+    await first.user.click(screen.getByRole("button", { name: /^Misc,/ }));
+    cleanup();
+
+    const { names } = setup();
+
+    const breadcrumb = within(screen.getByRole("navigation", { name: "Breadcrumb" }));
+    expect(breadcrumb.getByText("Misc")).toHaveAttribute("aria-current", "page");
+    expect(document.title).toBe("BrightHR - Misc");
+    expect(names()).toEqual(["Christmas party", "Welcome to the company!"]);
+  });
+
+  it("starts at the root when the remembered folder no longer exists", () => {
+    storeAll({ currentPath: '["Expenses", "Archive"]' });
+    const { names } = setup();
+
+    const breadcrumb = within(screen.getByRole("navigation", { name: "Breadcrumb" }));
+    expect(breadcrumb.getByText("Documents")).toHaveAttribute("aria-current", "page");
+    expect(names()).toHaveLength(5);
+  });
+
   it("ignores corrupted or out-of-date stored values", () => {
     storeAll({
+      currentPath: '"Expenses"',
       searchQuery: "{broken",
       fileType: '"xls"',
       sortType: '"size"',

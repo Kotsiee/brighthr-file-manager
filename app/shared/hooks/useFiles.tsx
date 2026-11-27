@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { STORAGE_KEYS } from "../constants/storage-keys";
 import { isFileTypeOption } from "../data/file-type-options";
 import {
@@ -7,6 +7,7 @@ import {
   getDirectory,
   goToBreadcrumb,
   goUp as goUpPath,
+  isValidPath,
 } from "../utils/directory";
 import { filterFilesByType } from "../utils/filter-files";
 import processFiles from "../utils/process-files";
@@ -28,6 +29,11 @@ export interface UseFilesOptions {
 
 const isString = (value: unknown): value is string => typeof value === "string";
 
+const isStringArray = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.every(isString);
+
+const ROOT_PATH: string[] = [];
+
 export default function useFiles(
   rawJson: string,
   {
@@ -39,9 +45,19 @@ export default function useFiles(
 ) {
   const rootFiles = useMemo(() => processFiles(rawJson), [rawJson]);
 
-  const [currentPath, setCurrentPath] = useState<string[]>([]);
   const storageKey = (name: keyof typeof STORAGE_KEYS) =>
     persist ? STORAGE_KEYS[name] : null;
+
+  const isExistingPath = useCallback(
+    (value: unknown): value is string[] =>
+      isStringArray(value) && isValidPath(rootFiles, value),
+    [rootFiles],
+  );
+  const [currentPath, setCurrentPath] = usePersistentState(
+    storageKey("currentPath"),
+    ROOT_PATH,
+    isExistingPath,
+  );
 
   const [searchQuery, setSearchQuery] = usePersistentState(
     storageKey("searchQuery"),
@@ -84,16 +100,16 @@ export default function useFiles(
   }, [currentDirectory, searchQuery, fileType, sortType, sortOrder]);
 
   const openFolder = (folderName: string) => {
-    setCurrentPath((prev) => enterFolder(prev, folderName));
+    setCurrentPath(enterFolder(currentPath, folderName));
     setSearchQuery("");
   };
 
   const navigateToBreadcrumb = (index: number) => {
-    setCurrentPath((prev) => goToBreadcrumb(prev, index));
+    setCurrentPath(goToBreadcrumb(currentPath, index));
   };
 
   const goUp = () => {
-    setCurrentPath((prev) => goUpPath(prev));
+    setCurrentPath(goUpPath(currentPath));
   };
 
   return {

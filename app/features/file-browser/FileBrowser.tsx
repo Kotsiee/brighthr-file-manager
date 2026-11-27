@@ -4,7 +4,7 @@ import { KeyboardEvent, useEffect, useMemo, useRef, useState } from "react";
 import { FMFile } from "@/app/shared/contracts/FMFile";
 import { ViewMode } from "@/app/shared/contracts/ViewMode";
 import { Breadcrumb } from "@/app/shared/utils/directory";
-import DirectoryBar from "./components/DirectoryBar";
+import DirectoryBar, { DirectoryBarHandle } from "./components/DirectoryBar";
 import FileCard from "./components/FileCard";
 import FolderCard from "./components/FolderCard";
 import styles from "./FileBrowser.module.css";
@@ -54,13 +54,15 @@ export default function FileBrowser({
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
   // The card grid: every card in grid view, the folders in list view.
   const gridRef = useRef<HTMLUListElement>(null);
-  const currentCrumbRef = useRef<HTMLSpanElement>(null);
+  const directoryBarRef = useRef<DirectoryBarHandle>(null);
   const focusAfterNavigation = useRef(false);
 
   useEffect(() => {
     if (!focusAfterNavigation.current) return;
     focusAfterNavigation.current = false;
-    (itemRefs.current[activeIndex] ?? currentCrumbRef.current)?.focus();
+    const item = itemRefs.current[activeIndex];
+    if (item) item.focus();
+    else directoryBarRef.current?.focusCurrent();
   }, [items, activeIndex]);
 
   const openFolder = (folder: FMFile) => {
@@ -89,6 +91,9 @@ export default function FileBrowser({
     const next = getNextIndex(sections, index, event.key);
     if (next === null) return;
     event.preventDefault();
+
+    const onTopRow = event.key === "ArrowUp" && next === index;
+    if (onTopRow && directoryBarRef.current?.focusParent()) return;
     itemRefs.current[next]?.focus();
   };
 
@@ -125,7 +130,8 @@ export default function FileBrowser({
         breadcrumbs={breadcrumbs}
         fileCount={documents.length}
         onNavigate={navigateToBreadcrumb}
-        currentRef={currentCrumbRef}
+        onArrowDown={() => itemRefs.current[activeIndex]?.focus()}
+        ref={directoryBarRef}
       />
 
       {items.length === 0 ? (

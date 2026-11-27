@@ -26,8 +26,6 @@ Then open [http://localhost:3000](http://localhost:3000).
 npm test
 ```
 
-<!-- TODO: confirm once the test runner is set up -->
-
 ### Other scripts
 
 | Command         | Purpose                         |
@@ -51,7 +49,6 @@ Plus:
 - **Sort type** dropdown with a button to flip the sort direction
 - **Grid and list views**, switched from the toolbar
 - **Item selection**, single and multi-select
-- **File tree** side panel for moving between folders
 - **Mobile first**, responsive layout
 
 ## Design
@@ -72,12 +69,21 @@ The look and feel follows BrightHR's own colour scheme and styling, taken from i
 
 Because this is a file manager, the layout also draws on Windows File Explorer and similar file manager designs found on Dribbble and Awwwards.
 
+### Design references
+
+These images were used as reference for the design of this app.
+
+| Reference | What it informed |
+| --------- | ---------------- |
+| ![BrightHR document storage illustration](images/Reference-1.png) | BrightHR's colour scheme, card styling and button styles |
+| ![Mobile file manager app](images/Reference-2.png) | The mobile layout, with folders shown as cards and as a list |
+| ![Desktop file manager web app](images/Reference-3.png) | The desktop toolbar, the sort and filter controls and the card grid |
+
 ### Layout
 
 The aim is simplicity, staying close to the brief. As a single page app with no other pages or tools to reach, the whole screen is given to the file manager:
 
 - **Header:** a fixed toolbar holding the search bar, filter tools, sort tools and the grid/list view switcher.
-- **Side panel:** a file tree of the folder structure.
 - **Main body:** the files and folders in the current folder, shown as a grid of cards or as a list.
 
 ### Figma designs
@@ -95,6 +101,8 @@ The layout was designed in Figma before it was built.
 | ![Mobile design, grid view](images/Mobile%20Design%20Grid.png) | ![Mobile design, list view](images/Mobile%20Design%20List.png) |
 
 ## Assumptions
+
+- The user is based in the UK, so dates are formatted in UK style (DD/MM/YYYY).
 
 - The data is read-only: files and folders cannot be renamed, added or deleted.
 - The only file types are PDF, CSV, DOC and MOV.
@@ -117,6 +125,7 @@ Left out to keep the task focused on the brief:
 - Zooming the view in and out
 - Searching within the file tree
 - Coloured folders, custom illustrations and custom icons
+- Virtual and infinite scrolling for large directories
 
 ### How I would approach these given more time
 
@@ -127,7 +136,27 @@ Left out to keep the task focused on the brief:
 - **Role based access control and password protection:** enforce permissions on the server, and have the API return only the items a user may see, along with the actions they may take. The UI would then hide or disable actions based on that, but never be the only check.
 - **File tree search:** reuse the same filter logic as the main search, and expand the tree to show the matching branches.
 - **Zoom:** a size control that changes the card size in grid view, stored as a user preference.
+- **Virtual and infinite scrolling:** once directories reach thousands of items, render only the rows or cards in view, using a windowing library such as `@tanstack/react-virtual`. With a paginated API, an `IntersectionObserver` on a sentinel element at the end of the list would load the next page as the user scrolls.
 
 ## Use of AI
 
 AI tools did not decide the style or functionality of this solution. I used them as a productivity tool, to write the logic I described faster than I could type it. I wrote the documentation myself, then used AI to refine it for clarity.
+
+---
+
+## Design amendments & decisions
+
+- **No file tree side panel:** I decided against a persistent file tree side panel. With the scope of this task and its shallow folders, a side panel adds visual clutter for little benefit. Keeping the full width open gives the most screen space to the files, so more cards fit on each row.
+- **A single `FMFile` interface:** Files and folders share one `FMFile` interface, rather than separate interfaces or a discriminated union. Given the read-only scope and the assumptions below, one contract kept recursive traversal, filtering and sorting simple. In a production app with mutations, type-specific metadata or deeper nesting, I would split them into separate interfaces or a discriminated union for stricter type safety.
+- **A single client component:** The entire page is wrapped in a single `"use client"` component. This is usually an anti-pattern in larger apps, because it causes unnecessary re-renders and a larger bundle. It suits this app, which is lightweight and where every part of the UI depends on the same shared state.
+## Result
+
+The finished app, in grid view.
+
+### Desktop
+
+![Finished app on desktop, grid view](images/Result-Desktop.png)
+
+### Mobile
+
+![Finished app on mobile, grid view](images/Result-Mobile.png)
